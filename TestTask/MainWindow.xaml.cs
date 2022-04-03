@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml;
 using System.Xml.Serialization;
+using Excel = Microsoft.Office.Interop.Excel;
 
 namespace TestTask
 {
@@ -23,11 +24,14 @@ namespace TestTask
     /// </summary>
     public partial class MainWindow : Window
     {
+        public Channel[] channelList;
         public MainWindow()
         {
             InitializeComponent();
         }
+
         private void XMLDataBase(object sender, RoutedEventArgs e)
+        ///Read data from a file using a data model.
         {
             Channels channels;
             string path = @"data.xml";
@@ -37,23 +41,64 @@ namespace TestTask
             StreamReader reader = new StreamReader(path);
             channels = (Channels)serializer.Deserialize(reader);
             reader.Close();
-            Console.WriteLine("Данные отлично считаны!");         
-
+            Console.WriteLine("Данные отлично считаны!");
+            channelList = channels.ChannelList;
         }
+
         private void XMLRegularExpressions(object sender, RoutedEventArgs e)
-        {
-            
-        }
-        private void AddExel(object sender, RoutedEventArgs e)
+        ///Read data from a file using regular expressions
         {
 
         }
+
+
+        private void AddExel(object sender, RoutedEventArgs e)
+        ///Write data to excel
+        {
+            /*Excel.Application xlApp = new Excel.Application();
+            if(xlApp != null)
+            {
+                MessageBox.Show("Excel is not properly installed!!");
+                return;
+                Excel.Workbook xlWorkBook;
+                Excel.Worksheet xlWorkSheet;
+                object misValue = System.Reflection.Missing.Value;
+            }*/
+
+        }
+
         private void AddWord(object sender, RoutedEventArgs e)
+        ///Write data to word
         {
         }
-        private void AddTxt(object sender, RoutedEventArgs e)
+
+        private async void AddTxt(object sender, RoutedEventArgs e)
+        ///Write data to txt
         {
-            
+            string path = "TxtAdd.txt";
+            if (!File.Exists(path))
+            {
+                using (FileStream fs = File.Create(path));
+            }
+            if (channelList == null)
+            {
+                Console.WriteLine("Данные из файла не были взяты!");
+                return;
+            }
+            using (StreamWriter writer = new StreamWriter(path, true))
+            {   
+                foreach (Channel channel in channelList)
+                {
+                    await writer.WriteLineAsync($"{channel.title}");
+                    await writer.WriteLineAsync($"\t{channel.link}");
+                    await writer.WriteLineAsync($"\t{channel.description}");
+                    await writer.WriteLineAsync($"\t{channel.category}");
+                    await writer.WriteLineAsync($"\t{channel.pubDate}");
+                }
+                Console.WriteLine("Данные успешно были записаны в TxtAdd.txt файл!");
+                channelList = null;
+                
+            }
         }
     }
 }
