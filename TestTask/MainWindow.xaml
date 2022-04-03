@@ -11,14 +11,14 @@
             <StackPanel>
                 <TextBlock Text="Считать данные из файлов" HorizontalAlignment="Center" FontSize="20" FontWeight="Bold" Margin="0 0 0 20"/>
                 <Grid>
-                    <Button HorizontalAlignment="Left" Content="Модель данных" FontSize="20" Margin="0 0 0 20"/>
-                    <Button HorizontalAlignment="Right" Content="Регулярные выражения" FontSize="20" Margin="0 0 0 20"/>
+                    <Button HorizontalAlignment="Left" Content="Модель данных" FontSize="20" Margin="0 0 0 20" Click="XMLDataBase"/>
+                    <Button HorizontalAlignment="Right" Content="Регулярные выражения" FontSize="20" Margin="0 0 0 20" Click="XMLRegularExpressions"/>
                 </Grid>
                 <TextBlock Text="Записать данные в" HorizontalAlignment="Center"  FontSize="20" FontWeight="Bold" Margin="0 20 0 20"/>
                 <Grid>
-                    <Button HorizontalAlignment="Left" FontSize="20" Content="Exel" Margin="0 0 0 20"/>
-                    <Button HorizontalAlignment="Center" FontSize="20" Content="Word" Margin="0 0 0 20"/>
-                    <Button HorizontalAlignment="Right" FontSize="20" Content="Текстовый файл" Margin="0 00 0 20"/>
+                    <Button HorizontalAlignment="Left" FontSize="20" Content="Exel" Margin="0 0 0 20" Click="AddExel"/>
+                    <Button HorizontalAlignment="Center" FontSize="20" Content="Word" Margin="0 0 0 20" Click="AddWord"/>
+                    <Button HorizontalAlignment="Right" FontSize="20" Content="Текстовый файл" Margin="0 00 0 20" Click="AddTxt"/>
                 </Grid>
             </StackPanel>
         </Border>
