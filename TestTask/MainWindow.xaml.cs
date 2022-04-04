@@ -16,6 +16,8 @@ using System.Windows.Shapes;
 using System.Xml;
 using System.Xml.Serialization;
 using Excel = Microsoft.Office.Interop.Excel;
+using Path = System.IO.Path;
+using Word = Microsoft.Office.Interop.Word;
 
 namespace TestTask
 {
@@ -30,7 +32,7 @@ namespace TestTask
             InitializeComponent();
         }
 
-        private void XMLDataBase(object sender, RoutedEventArgs e)
+        private async void XMLDataBase(object sender, RoutedEventArgs e)
         ///Read data from a file using a data model.
         {
             Channels channels;
@@ -67,10 +69,61 @@ namespace TestTask
 
         }
 
-        private void AddWord(object sender, RoutedEventArgs e)
+        private async void AddWord(object sender, RoutedEventArgs e)
         ///Write data to word
         {
+            try
+            {
+                //Create an instance for word app  
+                Word.Application winword = new Word.Application();
+
+                //Set animation status for word application  
+                 winword.ShowAnimation = false;
+
+                    //Set status for word application is to be visible or not.  
+                winword.Visible = true;
+
+                    //Create a missing variable for missing value  
+                object missing = System.Reflection.Missing.Value;
+
+                //Create a new document  
+                Word.Document document = winword.Documents.Add(ref missing, ref missing, ref missing, ref missing);
+                if (channelList == null)
+                {
+                    Console.WriteLine("Данные из файла не были взяты!");
+                    return;
+                }
+
+                Word.Paragraph para1 = document.Content.Paragraphs.Add(ref missing);
+
+                foreach (Channel channel in channelList)
+                {
+                    para1.Range.Text = $"\t{channel.title} " + Environment.NewLine;
+                    para1.Range.Text = $"\t{channel.link}" + Environment.NewLine;
+                    para1.Range.Text = $"\t{channel.description} " + Environment.NewLine;
+                    para1.Range.Text = $"\t{channel.category} " + Environment.NewLine;
+                    para1.Range.Text = $"\t{channel.pubDate}\n\n\n " + Environment.NewLine;
+                }
+                Console.WriteLine("Данные успешно были записаны в WordAdd.docx файл!");
+                channelList = null;
+
+
+                //Save the document  
+                object filename = @"D:\Projects\AlfaBank\TestTask\bin\Debug\WordApp.docx";
+                document.SaveAs2(ref filename);
+                document.Close(ref missing, ref missing, ref missing);
+                document = null;
+                winword.Quit(ref missing, ref missing, ref missing);
+                winword = null;
+            }
+            catch (Exception ex)
+            {
+                 MessageBox.Show(ex.Message);
+            }
         }
+
+
+        
 
         private async void AddTxt(object sender, RoutedEventArgs e)
         ///Write data to txt
